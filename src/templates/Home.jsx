@@ -5,6 +5,7 @@ import { Hero } from '../components/Layout/Hero';
 import { Navigator } from '../components/Navigator';
 import { RichText } from '../components/Layout/RichText';
 import { ArticleCard } from '../components/Layout/Blog/Cards/ArticleCard';
+import { MySocial } from '../components/Layout/Icons/MySocial';
 import {
   SectionGridThreeCols,
   GridTextBox,
@@ -39,21 +40,10 @@ const HomepageTemplate = ({
       title={heroTitle}
       subtitle={heroSubtitle}
       button={
-        <Navigator className="classicButton classicButtonOutline" recordId={id}>
-          {seeAllPosts}
-        </Navigator>
+        <MySocial />
       }
-      // sectionChildren={
-      //   <SectionGridThreeCols noPaddings>
-      //     {features.map(({ id: featureId, title, description }) => (
-      //       <GridTextBox small key={featureId}>
-      //         <HeadingSmallWithTip>{title}</HeadingSmallWithTip>
-      //         <RichText>{description}</RichText>
-      //       </GridTextBox>
-      //     ))}
-      //   </SectionGridThreeCols>
-      // }
     />
+    
     {postNodes.length > 0 && (
       <section style={{ paddingTop: 'var(--globalPaddingTb)' }}>
         <SectionTitle>{featuredPostsTitle}</SectionTitle>
