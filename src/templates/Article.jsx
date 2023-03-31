@@ -16,13 +16,13 @@ import {
   Section,
   SectionGridTwoCols,
 } from '../components/Layout/sharedStyles/sectionStyles';
-
 const ArticleTemplate = ({
   data: {
     datoCmsBlogPost: {
       id,
       structuredBody,
       title,
+      slug,
       subtitle,
       author,
       seo,
@@ -35,12 +35,17 @@ const ArticleTemplate = ({
     datoCmsMiscTextString: { updatedAtText, nextReadText },
   },
   pageContext,
+  
 }) => (
   <ArticleWrapper
     pageData={pageContext}
     seoTitle={seo?.seoTitle}
     seoDescription={seo?.seoDescription}
+    slug={slug}
     seoImage={imgUrl}
+    twitterCard={seo?.twitterCard}
+    firstPublishedAt={firstPublishedAt}
+    updatedAt={updatedAt}
   >
     <Section as="article">
       <ArticleHeader
@@ -166,12 +171,14 @@ export const query = graphql`
       originalId
       locale
       title
+      slug
       seo {
         seoTitle: title
         seoDescription: description
         seoImage: image {
           seoImageUrl: url
         }
+        twitterCard
       }
       subtitle
       coverImage {
