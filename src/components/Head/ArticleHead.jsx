@@ -8,7 +8,9 @@ import { useLocales } from '../../hooks/useLocales';
 import { useTextDirection } from '../../hooks/useTextDirection';
 import { usePageLocale } from '../../hooks/usePageLocale';
 
-export const ArticleHead = ({ seoTitle, seoDescription, seoImage }) => {
+export const ArticleHead = ({ 
+  seoTitle, seoDescription, slug, seoImage, firstPublishedAt, updatedAt, twitterCard
+}) => {
   const data = useStaticQuery(graphql`
     query {
       allDatoCmsSeoAndPwa {
@@ -25,6 +27,11 @@ export const ArticleHead = ({ seoTitle, seoDescription, seoImage }) => {
           }
         }
       }
+      site {
+        siteMetadata {
+          siteUrl
+        }
+      }
     }
   `);
 
@@ -38,6 +45,9 @@ export const ArticleHead = ({ seoTitle, seoDescription, seoImage }) => {
 
   const { isRtl } = useTextDirection();
 
+  const baseUrl = data.site.siteMetadata.siteUrl
+  const url = pageLocale === 'id' ? `${baseUrl}/id/${slug}` : `${baseUrl}/${slug}`;
+  const locale = pageLocale === 'id' ? 'id_ID' : 'en_US';
   const seoAndPwaNodesMatch = seoAndPwaNodes.find(
     ({ locale }) => locale === pageLocale
   );
@@ -54,24 +64,28 @@ export const ArticleHead = ({ seoTitle, seoDescription, seoImage }) => {
     ? `${seoTitle} ${separator} ${siteName}`
     : siteName;
 
-  const openGraphTags = [
-    {
-      properties: ['og:title', 'twitter:title'],
-      content: titleContent,
-    },
-    {
-      properties: ['og:description', 'twitter:description'],
-      content: seoDescription || fallbackDescription,
-    },
-    {
-      properties: ['og:image', 'twitter:image'],
-      content: seoImage || defaultImgUrl,
-    },
-    { properties: ['og:url', 'twitter:url'], content: href },
-  ];
-
+  const jsonLdSite = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "url": "https://ramacan.dev",
+    logo: defaultImgUrl
+  };
+  const jsonLdArticle = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: titleContent,
+    image: [
+      seoImage || defaultImgUrl,
+    ],
+    description: seoDescription || fallbackDescription,
+    datePublished: firstPublishedAt,
+    dateModified: updatedAt,
+    author: {
+      "@type": "Person",
+      "name": siteName,
+    }
+  };
   const pwaIconSizes = ['192', '512'];
-
   return (
     <Helmet>
       {/* HTML lang and dir attrs */}
@@ -106,15 +120,31 @@ export const ArticleHead = ({ seoTitle, seoDescription, seoImage }) => {
         name="description"
         content={seoDescription || fallbackDescription}
       />
-      <meta property="og:type" content="website" />
-      {openGraphTags.map(({ properties, content }) =>
-        properties.map((property) => (
-          <meta key={property} property={property} content={content} />
-        ))
-      )}
+      <meta property="og:title" content={titleContent} />
+      <meta property="og:description" content={seoDescription || fallbackDescription} />
+      <meta property="og:image" content={ seoImage || defaultImgUrl } />
+      <meta property="og:type" content="article" />
+      <meta property="og:locale" content={locale} />
+      <meta property="og:url" content={href || url} />
+      <meta property="article:published_time" content={`${firstPublishedAt}`} />
+      <meta property="article:modified_time" content={`${updatedAt}`} />
+      <meta name="twitter:card" content={twitterCard || 'summary'}/>
+      <meta name="twitter:site" content="_ramacan" />
+      <meta name="twitter:creator" content="_ramacan" />
+      <meta name="twitter:title" content={titleContent} />
+      <meta name="twitter:description" content={seoDescription || fallbackDescription} />
+      <meta name="twitter:image" content={ seoImage || defaultImgUrl } />
       <meta name="author" content={siteName}/>
       <meta name="robots" content="index, follow" />
       <meta name="googlebot" content="index, follow" />
+      <link rel="alternate" hreflang="en" href={`${baseUrl}/${slug}`} />
+      <link rel="alternate" hreflang="id" href={`${baseUrl}/id/${slug}`} />
+      <script type="application/ld+json">
+        {JSON.stringify(jsonLdArticle)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(jsonLdSite)}
+      </script>
     </Helmet>
   );
 };

@@ -2,7 +2,7 @@ const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
   siteMetadata: {
-    siteUrl: 'http://localhost:8000',
+    siteUrl: 'https://ramacan.dev',
   },
   plugins: [
     {
@@ -21,8 +21,43 @@ module.exports = {
       },
       __key: 'pages',
     },
+    {
+      resolve: "gatsby-plugin-multi-language-sitemap",
+      options: {
+        query: `
+          {
+            site {
+              siteMetadata {
+                siteUrl
+              }
+            }
+            allSitePage {
+              nodes {
+                path
+              }
+            }
+          }
+        `,
+        resolveSiteUrl: () => 'https://ramacan.dev',
+        resolvePages: ({ allSitePage: { nodes: allPages } }) => {
+          return allPages.filter((page) => {
+            // Don't want to add private routes to the sitemap
+            if (page.path.includes('/dashboard')) {
+              return false;
+            }
+            return true;
+          }).map((page) => ({
+            ...page,
+            changefreq: 'daily',
+            priority: 0.7,
+          }));
+        },
+        langs: ['en', 'id'],
+        exclude: ["/dev-404-page/", "/404/", "/404.html"],
+        createLinkInHead: true,
+      },
+    },
     'gatsby-plugin-netlify',
-    'gatsby-plugin-sitemap',
     'gatsby-plugin-gatsby-cloud',
     'gatsby-plugin-image',
     'gatsby-plugin-react-helmet',
