@@ -112,6 +112,7 @@ export const PageHead = ({ seoTitle, seoDescription, seoImage }) => {
           <meta key={property} property={property} content={content} />
         ))
       )}
+      <meta name="google-site-verification" content="UxtiP0cvGsbsZgYsdki_AJ2aH0OvvCEk5vxphj7YzTE" />
     </Helmet>
   );
 };

@@ -139,6 +139,7 @@ export const ArticleHead = ({
       <meta name="googlebot" content="index, follow" />
       <link rel="alternate" hreflang="en" href={`${baseUrl}/${slug}`} />
       <link rel="alternate" hreflang="id" href={`${baseUrl}/id/${slug}`} />
+      <meta name="google-site-verification" content="UxtiP0cvGsbsZgYsdki_AJ2aH0OvvCEk5vxphj7YzTE" />
       <script type="application/ld+json">
         {JSON.stringify(jsonLdArticle)}
       </script>
