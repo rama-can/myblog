@@ -89,7 +89,7 @@ const ArticleCover = styled(GatsbyImage)`
   }
 
   @media (max-width: 860px) {
-    width: calc(100% + calc(var(--globalPaddingLr) * 2));
+    width: calc(100% + calc(var(--globalPaddingLr) * 3));
     height: 300px;
     border-radius: 0;
     margin: ${({ $isRtl }) =>
