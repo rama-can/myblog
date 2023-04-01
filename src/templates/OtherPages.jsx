@@ -20,7 +20,7 @@ import {
 
 const OtherPagesTemplate = ({
   data: {
-    datoCmsOtherPage: { seo, structuredBody },
+    datoCmsOtherPage: { seo, slug, structuredBody },
   },
   pageContext,
 }) => (
@@ -29,6 +29,7 @@ const OtherPagesTemplate = ({
     seoTitle={seo?.seoTitle}
     seoDescription={seo?.seoDescription}
     seoImage={seo?.seoImage?.seoImageUrl}
+    slug={slug}
   >
     {structuredBody?.value && (
       <StructuredText
@@ -151,6 +152,7 @@ export const query = graphql`
   query OtherPagesQuery($locale: String!, $id: String!) {
     datoCmsOtherPage(locale: { eq: $locale }, originalId: { eq: $id }) {
       locale
+      slug
       seo {
         seoTitle: title
         seoDescription: description

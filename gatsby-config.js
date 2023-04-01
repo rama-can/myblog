@@ -57,6 +57,21 @@ module.exports = {
         createLinkInHead: true,
       },
     },
+    {
+      resolve: 'gatsby-plugin-robots-txt',
+      options: {
+        host: 'https://ramacan.dev',
+        sitemap: [
+          'https://ramacan.dev/sitemap/sitemap-index.xml',
+          'https://ramacan.dev/sitemap/x-default-sitemap.xml',
+          'https://ramacan.dev/sitemap/id-sitemap.xml'
+        ],
+        policy: [
+          { userAgent: '*', allow: '/' },
+          { userAgent: '*', disallow: ['/dev-404-page/', '/404/', '/404.html'] }
+        ]
+      }
+    },
     'gatsby-plugin-netlify',
     'gatsby-plugin-gatsby-cloud',
     'gatsby-plugin-image',

@@ -8,7 +8,7 @@ import { useLocales } from '../../hooks/useLocales';
 import { useTextDirection } from '../../hooks/useTextDirection';
 import { usePageLocale } from '../../hooks/usePageLocale';
 
-export const PageHead = ({ seoTitle, seoDescription, seoImage }) => {
+export const PageHead = ({ seoTitle, seoDescription, slug, seoImage, twitterCard }) => {
   const data = useStaticQuery(graphql`
     query {
       allDatoCmsSeoAndPwa {
@@ -25,6 +25,11 @@ export const PageHead = ({ seoTitle, seoDescription, seoImage }) => {
           }
         }
       }
+      site {
+        siteMetadata {
+          siteUrl
+        }
+      }
     }
   `);
 
@@ -35,6 +40,10 @@ export const PageHead = ({ seoTitle, seoDescription, seoImage }) => {
   const { href } = useLocation();
   const { pageLocale } = usePageLocale();
   const { defaultLocale } = useLocales();
+
+  const baseUrl = data.site.siteMetadata.siteUrl
+  const url = pageLocale === 'id' ? `${baseUrl}/id/${slug}` : `${baseUrl}/${slug}`;
+  const locale = pageLocale === 'id' ? 'id_ID' : 'en_US';
 
   const { isRtl } = useTextDirection();
 
@@ -54,24 +63,14 @@ export const PageHead = ({ seoTitle, seoDescription, seoImage }) => {
     ? `${seoTitle} ${separator} ${siteName}`
     : siteName;
 
-  const openGraphTags = [
-    {
-      properties: ['og:title', 'twitter:title'],
-      content: titleContent,
-    },
-    {
-      properties: ['og:description', 'twitter:description'],
-      content: seoDescription || fallbackDescription,
-    },
-    {
-      properties: ['og:image', 'twitter:image'],
-      content: seoImage || defaultImgUrl,
-    },
-    { properties: ['og:url', 'twitter:url'], content: href },
-  ];
+  const jsonLdSite = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    url: baseUrl,
+    logo: defaultImgUrl
+  };
 
   const pwaIconSizes = ['192', '512'];
-
   return (
     <Helmet>
       {/* HTML lang and dir attrs */}
@@ -106,13 +105,27 @@ export const PageHead = ({ seoTitle, seoDescription, seoImage }) => {
         name="description"
         content={seoDescription || fallbackDescription}
       />
+      <meta property="og:title" content={titleContent} />
+      <meta property="og:description" content={seoDescription || fallbackDescription} />
+      <meta property="og:image" content={ seoImage || defaultImgUrl } />
       <meta property="og:type" content="website" />
-      {openGraphTags.map(({ properties, content }) =>
-        properties.map((property) => (
-          <meta key={property} property={property} content={content} />
-        ))
-      )}
+      <meta property="og:locale" content={locale} />
+      <meta property="og:url" content={href || url} />
+      <meta name="twitter:card" content={twitterCard || 'summary_large_image'}/>
+      <meta name="twitter:site" content="_ramacan" />
+      <meta name="twitter:creator" content="_ramacan" />
+      <meta name="twitter:title" content={titleContent} />
+      <meta name="twitter:description" content={seoDescription || fallbackDescription} />
+      <meta name="twitter:image" content={ seoImage || defaultImgUrl } />
+      <meta name="author" content={siteName}/>
+      <meta name="robots" content="index, follow" />
+      <meta name="googlebot" content="index, follow" />
+      <link rel="alternate" hreflang="en" href={`${baseUrl}/${slug}` || `${baseUrl}`} />
+      <link rel="alternate" hreflang="id" href={`${baseUrl}/id/${slug}` || `${baseUrl}/id`} />
       <meta name="google-site-verification" content="UxtiP0cvGsbsZgYsdki_AJ2aH0OvvCEk5vxphj7YzTE" />
+      <script type="application/ld+json">
+        {JSON.stringify(jsonLdSite)}
+      </script>
     </Helmet>
   );
 };

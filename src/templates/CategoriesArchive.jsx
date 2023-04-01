@@ -10,6 +10,7 @@ const CategoriesArchiveTemplate = ({
     datoCmsCategoriesArchive: {
       hero: [{ heroTitle, heroSubtitle, heroAlt }],
       seo,
+      slug,
     },
     allDatoCmsCategory: { categoryNodes },
   },
@@ -20,6 +21,7 @@ const CategoriesArchiveTemplate = ({
     seoTitle={seo?.seoTitle}
     seoDescription={seo?.seoDescription}
     seoImage={seo?.seoImage?.seoImageUrl}
+    slug={slug}
   >
     <Hero caption={heroAlt} title={heroTitle} subtitle={heroSubtitle} />
     <SectionGridThreeCols>
@@ -44,6 +46,7 @@ export const query = graphql`
   query CategoriesArchiveQuery($locale: String!) {
     datoCmsCategoriesArchive(locale: { eq: $locale }) {
       locale
+      slug
       seo {
         seoTitle: title
         seoDescription: description

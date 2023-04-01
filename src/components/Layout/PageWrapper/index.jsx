@@ -7,7 +7,9 @@ export const PageWrapper = ({
   pageData,
   seoTitle,
   seoDescription,
+  slug,
   seoImage,
+  twitterCard,
   children,
 }) => (
   <LocaleProvider pageData={pageData}>
@@ -15,6 +17,8 @@ export const PageWrapper = ({
       seoTitle={seoTitle}
       seoDescription={seoDescription}
       seoImage={seoImage}
+      slug={slug}
+      twitterCard={twitterCard}
     />
     <Header />
     <main>{children}</main>

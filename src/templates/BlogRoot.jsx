@@ -11,6 +11,7 @@ const BlogRootTemplate = ({
     datoCmsBlogRoot: {
       hero: [{ heroTitle, heroSubtitle }],
       seo,
+      slug,
     },
     allDatoCmsBlogPost: { blogPostNodes },
   },
@@ -21,6 +22,8 @@ const BlogRootTemplate = ({
     seoTitle={seo?.seoTitle}
     seoDescription={seo?.seoDescription}
     seoImage={seo?.seoImage?.seoImageUrl}
+    twitterCard={seo?.twitterCard}
+    slug={slug}
     seo
   >
     <Hero title={heroTitle} subtitle={heroSubtitle} />
@@ -97,12 +100,14 @@ export const query = graphql`
     }
     datoCmsBlogRoot(locale: { eq: $locale }) {
       locale
+      slug
       seo {
         seoTitle: title
         seoDescription: description
         seoImage: image {
           seoImageUrl: url
         }
+        twitterCard
       }
       hero {
         heroTitle

@@ -11,6 +11,7 @@ const CategoryTemplate = ({
     datoCmsCategory: {
       hero: [{ heroTitle, heroSubtitle, heroAlt }],
       seo,
+      slug,
     },
     allCategoryPosts: { postNodes },
   },
@@ -20,7 +21,9 @@ const CategoryTemplate = ({
     pageData={pageContext}
     seoTitle={seo?.seoTitle}
     seoDescription={seo?.seoDescription}
+    slug={slug}
     seoImage={seo?.seoImage?.seoImageUrl}
+    twitterCard={seo?.twitterCard}
   >
     <Hero caption={heroAlt} title={heroTitle} subtitle={heroSubtitle} />
     <CategoriesMenu />
@@ -66,12 +69,14 @@ export const query = graphql`
   query CategoryQuery($id: String!, $locale: String!) {
     datoCmsCategory(originalId: { eq: $id }, locale: { eq: $locale }) {
       locale
+      slug
       seo {
         seoTitle: title
         seoDescription: description
         seoImage: image {
           seoImageUrl: url
         }
+        twitterCard
       }
       hero {
         heroTitle

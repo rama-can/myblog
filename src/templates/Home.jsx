@@ -32,8 +32,10 @@ const HomepageTemplate = ({
   <PageWrapper
     pageData={pageContext}
     seoTitle={seo?.seoTitle}
-    seoDescription={seo?.seoDescription}
+    seoDescription={seo?.seoDescription} 
     seoImage={seo?.seoImage?.seoImageUrl}
+    twitterCard={seo?.twitterCard}
+    slug=''
   >
     <Hero
       caption={heroAlt}
@@ -95,6 +97,7 @@ export const query = graphql`
         seoImage: image {
           seoImageUrl: url
         }
+        twitterCard
       }
       hero {
         heroAlt

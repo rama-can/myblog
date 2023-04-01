@@ -128,7 +128,7 @@ export const ArticleHead = ({
       <meta property="og:url" content={href || url} />
       <meta property="article:published_time" content={`${firstPublishedAt}`} />
       <meta property="article:modified_time" content={`${updatedAt}`} />
-      <meta name="twitter:card" content={twitterCard || 'summary'}/>
+      <meta name="twitter:card" content={twitterCard || 'summary'}/> 
       <meta name="twitter:site" content="_ramacan" />
       <meta name="twitter:creator" content="_ramacan" />
       <meta name="twitter:title" content={titleContent} />
